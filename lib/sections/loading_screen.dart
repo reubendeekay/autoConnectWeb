@@ -24,7 +24,6 @@ class _InitialLoadingScreenState extends State<InitialLoadingScreen> {
           .getCurrentUser(FirebaseAuth.instance.currentUser!.uid);
       await Provider.of<PaymentProvider>(context, listen: false)
           .getTransactions();
-
       Get.off(() => const HomePage());
     });
   }

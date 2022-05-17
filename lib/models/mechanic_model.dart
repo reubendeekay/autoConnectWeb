@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:autoconnectweb/models/service_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:autoconnectweb/models/analytics_model.dart';
 
@@ -78,7 +79,7 @@ class MechanicModel {
       location: json['location'],
       id: json.id,
       closingTime: json['closingTime'],
-      services: json['services'],
+      services: json['services'].map((e) => ServiceModel.fromJson(e)).toList(),
       images: json['images'],
       status: json['status'],
       nationalId: json['nationalId'],

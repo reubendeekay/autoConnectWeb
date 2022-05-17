@@ -1,4 +1,3 @@
-import 'package:autoconnectweb/models/card_details.dart';
 import 'package:autoconnectweb/models/mechanic_model.dart';
 import 'package:autoconnectweb/providers/mechanic_provider.dart';
 import 'package:autoconnectweb/widgets/top_mechanics_widget.dart';
@@ -7,9 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CardsSection extends StatelessWidget {
-  final List<CardDetails> cardDetails;
-
-  const CardsSection({Key? key, required this.cardDetails}) : super(key: key);
+  const CardsSection({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

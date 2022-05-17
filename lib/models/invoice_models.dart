@@ -29,15 +29,15 @@ class InvoiceInfo {
 class InvoiceItem {
   final String description;
   final DateTime date;
-  final int quantity;
-  final double vat;
+  final String mechanic;
+  final String payer;
   final double unitPrice;
 
   const InvoiceItem({
     required this.description,
     required this.date,
-    required this.quantity,
-    required this.vat,
+    required this.mechanic,
+    required this.payer,
     required this.unitPrice,
   });
 }

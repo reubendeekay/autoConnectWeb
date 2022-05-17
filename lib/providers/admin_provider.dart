@@ -40,4 +40,20 @@ class AdminProvider with ChangeNotifier {
         .update({'isMechanic': false});
     notifyListeners();
   }
+
+  Future<void> makeAdmin(String uid, bool isAdmin) async {
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(uid)
+        .update({'isAdmin': !isAdmin});
+    notifyListeners();
+  }
+
+  Future<void> revokeAdmin(String uid) async {
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(uid)
+        .update({'isAdmin': false});
+    notifyListeners();
+  }
 }

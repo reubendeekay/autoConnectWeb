@@ -7,14 +7,19 @@ class TransactionModel {
   final String? name;
   final Timestamp? createdAt;
   final String? mechanicId;
+  final String? mechanicName;
+  final String? customerName;
 
-  TransactionModel(
-      {this.id,
-      this.profilePic,
-      this.amount,
-      this.name,
-      this.createdAt,
-      this.mechanicId});
+  TransactionModel({
+    this.id,
+    this.profilePic,
+    this.amount,
+    this.name,
+    this.createdAt,
+    this.mechanicId,
+    this.mechanicName,
+    this.customerName,
+  });
 
   factory TransactionModel.fromJson(dynamic json) {
     return TransactionModel(
@@ -24,6 +29,8 @@ class TransactionModel {
       name: json['name'],
       createdAt: json['createdAt'],
       mechanicId: json['mechanicId'],
+      mechanicName: json['mechanicName'],
+      customerName: json['customerName'],
     );
   }
 }

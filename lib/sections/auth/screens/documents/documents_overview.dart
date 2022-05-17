@@ -21,8 +21,11 @@ class DocumentOverview extends StatelessWidget {
                       context,
                     ).selecetdMechanic ==
                     null
-                ? const Center(
-                    child: Text('No Requests '),
+                ? Container(
+                    color: Colors.white,
+                    child: const Center(
+                      child: Text('No Requests '),
+                    ),
                   )
                 : const DocumentDetailScreen())
       ],
@@ -46,6 +49,11 @@ class DocumentPeopleList extends StatelessWidget {
           }
 
           List<DocumentSnapshot> docs = snapshot.data!.docs;
+
+          if (docs.isNotEmpty) {
+            Provider.of<UIProvider>(context, listen: false).selecetdMechanic =
+                MechanicModel.fromJson(docs.first);
+          }
 
           return ListView(
             children: List.generate(

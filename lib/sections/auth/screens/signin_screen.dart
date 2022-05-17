@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, avoid_print
 
+import 'package:autoconnectweb/helpers/auth_exception.dart';
 import 'package:autoconnectweb/helpers/my_loader.dart';
 import 'package:autoconnectweb/main.dart';
 import 'package:autoconnectweb/providers/auth_provider.dart';
@@ -182,21 +183,37 @@ class _SignInScreenState extends State<SignInScreen> {
                                     setState(() {
                                       isLoading = true;
                                     });
-                                    try {
-                                      print(email!);
-                                      print(password);
-                                      await Provider.of<AuthProvider>(context,
-                                              listen: false)
-                                          .login(
-                                              email: email!.trim(),
-                                              password: password!.trim());
+
+                                    final status =
+                                        await Provider.of<AuthProvider>(context,
+                                                listen: false)
+                                            .login(
+                                                email: email!.trim(),
+                                                password: password!.trim());
+
+                                    setState(() {
+                                      isLoading = false;
+                                    });
+
+                                    if (status == AuthResultStatus.successful) {
                                       Get.off(() => InitialLoadingScreen());
-                                    } catch (e) {
-                                      print(e);
-                                      setState(() {
-                                        isLoading = false;
-                                      });
+                                    } else {
+                                      final errorMsg = AuthExceptionHandler
+                                          .generateExceptionMessage(status);
+
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                            errorMsg,
+                                            style: const TextStyle(
+                                                color: Colors.white),
+                                          ),
+                                          backgroundColor: Colors.red,
+                                        ),
+                                      );
                                     }
+
                                     // Get.toNamed(AppPages.initial);
                                   },
                                 ),

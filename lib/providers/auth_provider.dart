@@ -1,3 +1,4 @@
+import 'package:autoconnectweb/helpers/auth_exception.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:autoconnectweb/models/analytics_model.dart';
 import 'package:autoconnectweb/models/mechanic_model.dart';
@@ -17,15 +18,29 @@ class AuthProvider with ChangeNotifier {
   MechanicModel? get mechanic => _mechanic;
   //STEP 1
 
-  Future<void> login({String? email, String? password}) async {
-//FIREBASE LOGIN WITH EMAIL AND PASSWORD
+  Future<AuthResultStatus> login({String? email, String? password}) async {
+    UserCredential? _currentUser;
 
-    final UserCredential _currentUser = await FirebaseAuth.instance
-        .signInWithEmailAndPassword(email: email!, password: password!);
+    AuthResultStatus _status;
 
-    getCurrentUser(_currentUser.user!.uid);
+    try {
+      _currentUser = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email!, password: password!);
+
+      if (_currentUser.user != null) {
+        _status = AuthResultStatus.successful;
+
+        await getCurrentUser(_currentUser.user!.uid);
+      } else {
+        _status = AuthResultStatus.undefined;
+      }
+    } catch (e) {
+      print('Exception @createAccount: $e');
+      _status = AuthExceptionHandler.handleException(e);
+    }
 
     notifyListeners();
+    return _status;
   }
 
   Future<void> signUp(

@@ -1,6 +1,5 @@
 import 'package:autoconnectweb/firebase_options.dart';
 import 'package:autoconnectweb/layout/app_layout.dart';
-import 'package:autoconnectweb/models/card_details.dart';
 import 'package:autoconnectweb/models/enums/card_type.dart';
 import 'package:autoconnectweb/providers/admin_provider.dart';
 import 'package:autoconnectweb/providers/auth_provider.dart';
@@ -133,14 +132,9 @@ class Dashboard extends StatelessWidget {
             child: Padding(
               padding: EdgeInsets.only(left: Styles.defaultPadding),
               child: Column(
-                children: [
-                  CardsSection(
-                    cardDetails: [
-                      CardDetails("431421432", CardType.mastercard),
-                      CardDetails("423142231", CardType.mastercard),
-                    ],
-                  ),
-                  const Expanded(
+                children: const [
+                  CardsSection(),
+                  Expanded(
                     child: StaticsByCategory(),
                   ),
                 ],

@@ -1,9 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class UserModel {
   final String? fullName;
   final String? email;
   final String? password;
   final String? phoneNumber;
   final String? imageUrl;
+  bool? isAdmin;
 
   final String? userId;
 
@@ -20,6 +23,7 @@ class UserModel {
       this.imageUrl,
       this.isMechanic,
       this.isOnline,
+      this.isAdmin,
       this.lastSeen});
 
   Map<String, dynamic> toJson() {
@@ -31,6 +35,7 @@ class UserModel {
       'imageUrl': imageUrl,
       'userId': userId,
       'isOnline': true,
+      'lastSeen': Timestamp.now().millisecondsSinceEpoch,
     };
   }
 
@@ -42,6 +47,10 @@ class UserModel {
       phoneNumber: json['phoneNumber'],
       imageUrl: json['profilePic'],
       userId: json.id,
+      isMechanic: json['isMechanic'],
+      isOnline: json['isOnline'],
+      lastSeen: json['lastSeen'],
+      isAdmin: json['isAdmin'],
     );
   }
 }

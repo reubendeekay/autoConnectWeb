@@ -1,3 +1,4 @@
+import 'package:autoconnectweb/sections/auth/screens/mechanic_profile/mechanic_profile_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:autoconnectweb/models/mechanic_model.dart';
 import 'package:autoconnectweb/models/user_model.dart';
@@ -5,6 +6,7 @@ import 'package:autoconnectweb/providers/admin_provider.dart';
 import 'package:autoconnectweb/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 
 class UserManagement extends StatelessWidget {
   const UserManagement({Key? key}) : super(key: key);
@@ -91,12 +93,79 @@ class UsersCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      leading: CircleAvatar(
-        backgroundImage: NetworkImage(user.imageUrl!),
-      ),
-      title: Text(user.fullName!),
-      subtitle: Text(user.email!),
+    return Stack(
+      children: [
+        ListTile(
+          leading: CircleAvatar(
+            backgroundImage: NetworkImage(user.imageUrl!),
+          ),
+          title: Row(
+            children: [
+              Text(user.fullName!),
+              if (user.isAdmin!)
+                const SizedBox(
+                  width: 10,
+                ),
+              if (user.isAdmin!)
+                const Icon(
+                  Icons.verified,
+                  size: 16,
+                  color: Colors.green,
+                ),
+            ],
+          ),
+          subtitle: Text(user.email!),
+        ),
+        Positioned(
+            top: 5,
+            right: 5,
+            child: PopupMenuButton(
+              itemBuilder: (ctx) => [
+                PopupMenuItem(
+                  child: Text(user.isAdmin! ? 'Revoke Admin' : 'Make Admin'),
+                  value: 1,
+                ),
+                const PopupMenuItem(
+                  child: Text('Delete'),
+                  value: 2,
+                ),
+                const PopupMenuItem(
+                  child: Text('Block'),
+                  value: 3,
+                ),
+              ],
+              onSelected: (value) async {
+                if (value == 1) {
+                  Provider.of<AdminProvider>(context, listen: false)
+                      .makeAdmin(user.userId!, user.isAdmin!);
+                  user.isAdmin = !user.isAdmin!;
+                } else if (value == 2) {
+                  final res = await http.post(
+                      Uri.parse(
+                          'https://us-central1-my-autoconnect.cloudfunctions.net/deleteUser'),
+                      body: {
+                        'uid': user.userId!,
+                      });
+
+                  if (res.statusCode == 200) {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        backgroundColor: Colors.green,
+                        content: Text('User deleted successfully',
+                            style: TextStyle(
+                              color: Colors.white,
+                            ))));
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        backgroundColor: Colors.red,
+                        content: Text('Error deleting user',
+                            style: TextStyle(
+                              color: Colors.white,
+                            ))));
+                  }
+                } else if (value == 3) {}
+              },
+            ))
+      ],
     );
   }
 }
@@ -108,6 +177,7 @@ class MechanicTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final actions = Provider.of<AdminProvider>(context, listen: false);
+
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
@@ -118,20 +188,34 @@ class MechanicTile extends StatelessWidget {
           children: [
             Row(
               children: [
-                CircleAvatar(
-                  radius: 40,
-                  backgroundColor: Colors.grey,
-                  child: mechanic.status == 'blocked'
-                      ? const Center(
-                          child: Text(
-                            'Blocked',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        )
-                      : null,
-                  backgroundImage: mechanic.status == 'blocked'
-                      ? null
-                      : NetworkImage(mechanic.profile!),
+                GestureDetector(
+                  onTap: () {
+                    showDialog(
+                        context: context,
+                        builder: (ctz) => Dialog(
+                              child: SizedBox(
+                                width: 400,
+                                child: MechanicProfileScreen(
+                                  mechanic: mechanic,
+                                ),
+                              ),
+                            ));
+                  },
+                  child: CircleAvatar(
+                    radius: 40,
+                    backgroundColor: Colors.grey,
+                    child: mechanic.status == 'blocked'
+                        ? const Center(
+                            child: Text(
+                              'Blocked',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          )
+                        : null,
+                    backgroundImage: mechanic.status == 'blocked'
+                        ? null
+                        : NetworkImage(mechanic.profile!),
+                  ),
                 ),
                 const SizedBox(
                   width: 20,
