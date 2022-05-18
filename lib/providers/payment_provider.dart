@@ -21,7 +21,7 @@ class PaymentProvider with ChangeNotifier {
             date: DateTime.now(),
             dueDate: DateTime.now(),
             description: 'All transacations to date',
-            number: uid),
+            number: uid.substring(0, 11)),
         supplier: const Supplier(
             name: 'AutoConnect',
             address: 'Connecting Drivers to Mechanics',

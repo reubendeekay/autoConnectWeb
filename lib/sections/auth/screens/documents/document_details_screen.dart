@@ -103,6 +103,18 @@ class DocumentDetailScreen extends StatelessWidget {
                     color: Colors.grey[200],
                     padding: const EdgeInsets.all(20),
                     child: Text(mechanic.selecetdMechanic!.address!)),
+                Container(
+                    margin: const EdgeInsets.symmetric(vertical: 10),
+                    color: Colors.grey[200],
+                    padding: const EdgeInsets.all(20),
+                    child: Text('Mechanic Location' +
+                        '(' +
+                        mechanic.selecetdMechanic!.location!.latitude
+                            .toString() +
+                        ',' +
+                        mechanic.selecetdMechanic!.location!.longitude
+                            .toString() +
+                        ')')),
                 const SizedBox(height: 20),
                 const Text(
                   'Documents',

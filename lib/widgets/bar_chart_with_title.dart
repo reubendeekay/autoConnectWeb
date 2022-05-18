@@ -2,6 +2,7 @@ import 'package:autoconnectweb/data/mock_data.dart';
 import 'package:autoconnectweb/responsive.dart';
 import 'package:autoconnectweb/styles/styles.dart';
 import 'package:autoconnectweb/widgets/currency_text.dart';
+import 'package:autoconnectweb/widgets/withdraw_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 
@@ -39,7 +40,27 @@ class BarChartWithTitle extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const Icon(Icons.more_vert),
+              if (title.toLowerCase() == 'balance')
+                PopupMenuButton(
+                  itemBuilder: (i) {
+                    return const [
+                      PopupMenuItem(
+                        child: Text("Withdraw"),
+                        value: 1,
+                      ),
+                    ];
+                  },
+                  onSelected: (i) {
+                    if (i == 1) {
+                      showDialog(
+                          context: context,
+                          builder: (ctx) => const Dialog(
+                              child: SingleChildScrollView(
+                                  child: WithdrawWidget())));
+                    }
+                  },
+                  icon: const Icon(Icons.more_vert),
+                ),
             ],
           ),
           const SizedBox(height: 10),
