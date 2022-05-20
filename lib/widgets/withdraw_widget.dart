@@ -64,7 +64,7 @@ class _WithdrawWidgetState extends State<WithdrawWidget> {
                 });
                 amount = value;
               },
-              style: const TextStyle(color: Colors.white),
+              style: const TextStyle(color: Colors.black),
               decoration: InputDecoration(
                   hintText: 'Enter amount',
                   border: InputBorder.none,

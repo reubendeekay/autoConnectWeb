@@ -23,6 +23,7 @@ class UserManagement extends StatelessWidget {
             child: StreamBuilder<QuerySnapshot>(
                 stream: FirebaseFirestore.instance
                     .collection('mechanics')
+                    .where('status', isEqualTo: 'approved')
                     .snapshots(),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
